@@ -1,4 +1,5 @@
 import FileUploader from "./components/FileUploader/FileUploader";
+import PDFViewer from "./components/PDFViewer/PDFViewer";
 import "./App.css";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
               <FileUploader />
             </div>
           </div>
+          <PDFViewer />
         </div>
       </div>
     </>
