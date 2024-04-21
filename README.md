@@ -1,8 +1,35 @@
-# React + Vite
+# Text Extract API
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Text Extract API is a project built using Vite to extract text from PDF files and display it.
 
-Currently, two official plugins are available:
+## Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To use the Text Extract API, you'll need to follow these steps:
+
+1. Clone the repository:
+
+   ```bash
+   git clone <repository_url>
+   ```
+
+2. Install dependencies:
+   ```bash
+   cd text-extract-api
+   npm install
+   ```
+
+## Usage
+
+To start the server and use the Text Extract API:
+
+1. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+2. Navigate to `http://localhost:3000` in your browser.
+
+3. Upload a PDF file.
+
+4. The API will extract the text from the PDF file and display it.
