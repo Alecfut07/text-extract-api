@@ -1,5 +1,6 @@
 import FileUploader from "./components/FileUploader/FileUploader";
 import PDFViewer from "./components/PDFViewer/PDFViewer";
+import ExtractedText from "./components/ExtractedText/ExtractedText";
 import "./App.css";
 
 function App() {
@@ -13,6 +14,12 @@ function App() {
             </div>
           </div>
           <PDFViewer />
+        </div>
+        <hr className="my-auto" />
+        <div className="mx-4 my-4 h-screen w-1/2">
+          <div>
+            <ExtractedText />
+          </div>
         </div>
       </div>
     </>
