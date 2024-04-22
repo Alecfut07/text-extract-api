@@ -1,11 +1,16 @@
-import Mockup_v1 from "./Mockups/Mockup_v1/Mockup_v1";
-import Mockup_v2 from "./Mockups/Mockup_v2/Mockup_v2";
+import CustomNavbar from "./components/CustomNavbar/CustomNavbar";
+import Body from "./components/Body/Body";
+import CustomFooter from "./components/CustomFooter/CustomFooter";
 import "./App.css";
 
 function App() {
   return (
     <>
-      <Mockup_v2 />
+      <div className="min-h-screen relative">
+        <CustomNavbar />
+        <Body />
+        <CustomFooter />
+      </div>
     </>
   );
 }

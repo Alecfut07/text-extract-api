@@ -15,7 +15,6 @@ function Body() {
       <div className="flex flex-row justify-between">
         {/* Lado izquierdo */}
         <div className="w-1/2 flex justify-center">
-          {/* className="w-1/2 p-4" */}
           <div className="p-4">
             <h2 className="font-bold text-xl text-center">
               Extraiga texto de archivos PDF con facilidad
