@@ -1,7 +1,7 @@
 import { Carousel, IconButton } from "@material-tailwind/react";
 // import { data } from "../../data/example";
 
-function ExtractedTextResults({ data }) {
+function ExtractedTextObjectResults({ data }) {
   return (
     <Carousel
       className="rounded-xl"
@@ -100,4 +100,4 @@ function ExtractedTextResults({ data }) {
   );
 }
 
-export default ExtractedTextResults;
+export default ExtractedTextObjectResults;
