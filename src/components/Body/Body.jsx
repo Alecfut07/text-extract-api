@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import { Card, CardBody, CardHeader } from "@material-tailwind/react";
 import Swal from "sweetalert2";
 import FileUploader from "../FileUploader/FileUploader";
 import CustomTabs from "../CustomTabs/CustomTabs";
 import PDFViewer from "../PDFViewer/PDFViewer";
-import ExtractedTextResults from "../ExtractedTextResults/ExtractedTextResults";
+import ExtractedTextObjectResults from "../ExtractedTextObjectResults/ExtractedTextObjectResults";
+import ExtractedTextStringResults from "../ExtractedTextStringResults/ExtractedTextStringResults";
+import CustomStepper from "../CustomStepper/CustomStepper";
 import PDFService from "../../services/PDFService";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
@@ -18,6 +20,7 @@ function Body() {
 
   const initialValues = {
     file: null,
+    search: "",
   };
 
   const handleFileChange = (selectedFile) => {
@@ -27,21 +30,27 @@ function Body() {
     setActiveTab("Vista Previa");
   };
 
+  // Parsear Markdown a un arreglo de objetos.
   const parseJSON = (result) => {
     // Extraiga la cadena JSON del generated_content.
     const jsonString = result.generated_content.match(/\[.*\]/s)[0];
+    console.log("jsonString: ", jsonString);
     // Elimina los indicadores del bloque de código Markdown.
     const cleanedJsonString = jsonString.replace(/^```json|```$/g, "");
+    console.log("cleanedJsonString: ", cleanedJsonString);
     // Aplicar parse al JSON data.
     const jsonData = JSON.parse(cleanedJsonString);
+    console.log("jsonData: ", jsonData);
     setData(jsonData);
   };
 
   const convertPDF = async (values) => {
     try {
       setLoading(true);
-      const result = await PDFService.convertirPDF(values.file);
-      parseJSON(result);
+      const result = await PDFService.convertirPDF(values.file, values.search);
+      console.log(result);
+      // parseJSON(result);
+      setData(result);
       // setTextExtracted(true);
       Swal.fire({
         position: "top-end",
@@ -67,6 +76,7 @@ function Body() {
   };
 
   const handleSubmit = (values) => {
+    console.log(values);
     values.file = file;
     setActiveTab("Texto Extraído");
     convertPDF(values);
@@ -78,38 +88,22 @@ function Body() {
     <div className="mx-auto  py-12">
       <div className="flex flex-row justify-between">
         {/* Lado izquierdo */}
-        <div className="w-1/2 flex justify-center">
+        <div className="flex w-1/2 justify-center">
           <div className="p-4">
-            <h2 className="font-bold text-xl text-center">
+            <h2 className="text-center text-xl font-bold">
               Extraiga texto de archivos PDF con facilidad
             </h2>
             <p className="text-center">
-              Simplemente elija un archivo PDF y haga clic en el botón extraer
-              texto para comenzar.
+              Simplemente elija un archivo PDF, especificar en su busqueda y
+              haga clic en el botón extraer texto para comenzar.
             </p>
             <Formik initialValues={initialValues} onSubmit={handleSubmit}>
               {({ isSubmitting }) => (
                 <Form>
-                  <FileUploader onChange={handleFileChange} file={file} />
+                  <CustomStepper onChange={handleFileChange} file={file} />
                 </Form>
               )}
             </Formik>
-            <div className="mt-8 grid grid-cols-2 gap-4">
-              <div>
-                <h3 className="font-bold text-lg">Vista Previa</h3>
-                <p>
-                  Vea una vista previa del contenido del archivo PDF
-                  seleccionado.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-bold text-lg">Texto Extraído</h3>
-                <p>
-                  Muestra cada conjunto del texto extraído del archivo PDF en un
-                  cuadrado separado.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -119,13 +113,13 @@ function Body() {
             <CardHeader size="lg">
               <CustomTabs activeTab={activeTab} onChange={handleTabChange} />
             </CardHeader>
-            <CardBody className="w-full max-h-screen overflow-auto mt-6">
+            <CardBody className="mt-6 max-h-screen w-full overflow-auto">
               {activeTab === "Vista Previa" ? (
                 <PDFViewer file={file} />
               ) : (
                 <LoadingSpinner
                   loading={loading}
-                  Componente={<ExtractedTextResults data={data} />}
+                  Componente={<ExtractedTextStringResults data={data} />}
                 />
               )}
             </CardBody>

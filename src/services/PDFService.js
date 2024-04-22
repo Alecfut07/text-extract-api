@@ -3,9 +3,10 @@ import { host } from "../api/host";
 import { CONVERTIR_PDF } from "../utils/values";
 
 const PDFService = {
-  convertirPDF: async (file) => {
+  convertirPDF: async (file, search) => {
     const formData = new FormData();
     formData.append("pdf_file", file);
+    formData.append("text_user_input", search);
 
     const axiosConfig = {
       headers: {
