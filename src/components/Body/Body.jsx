@@ -1,12 +1,76 @@
 import { useState } from "react";
+import { Formik, Form } from "formik";
 import { Card, CardBody, CardHeader } from "@material-tailwind/react";
+import Swal from "sweetalert2";
 import FileUploader from "../FileUploader/FileUploader";
 import CustomTabs from "../CustomTabs/CustomTabs";
 import PDFViewer from "../PDFViewer/PDFViewer";
 import ExtractedTextResults from "../ExtractedTextResults/ExtractedTextResults";
+import PDFService from "../../services/PDFService";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 function Body() {
+  const [file, setFile] = useState(null);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  // const [textExtracted, setTextExtracted] = useState(false);
   const [activeTab, setActiveTab] = useState("Vista Previa");
+
+  const initialValues = {
+    file: null,
+  };
+
+  const handleFileChange = (selectedFile) => {
+    setFile(selectedFile);
+    // setTextExtracted(false);
+    setData([]);
+    setActiveTab("Vista Previa");
+  };
+
+  const parseJSON = (result) => {
+    // Extraiga la cadena JSON del generated_content.
+    const jsonString = result.generated_content.match(/\[.*\]/s)[0];
+    // Elimina los indicadores del bloque de código Markdown.
+    const cleanedJsonString = jsonString.replace(/^```json|```$/g, "");
+    // Aplicar parse al JSON data.
+    const jsonData = JSON.parse(cleanedJsonString);
+    setData(jsonData);
+  };
+
+  const convertPDF = async (values) => {
+    try {
+      setLoading(true);
+      const result = await PDFService.convertirPDF(values.file);
+      parseJSON(result);
+      // setTextExtracted(true);
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Extracción del texto",
+        text: "Fue exitosa!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Error",
+        text: "Algo salió mal!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = (values) => {
+    values.file = file;
+    setActiveTab("Texto Extraído");
+    convertPDF(values);
+  };
 
   const handleTabChange = (value) => setActiveTab(value);
 
@@ -23,7 +87,13 @@ function Body() {
               Simplemente elija un archivo PDF y haga clic en el botón extraer
               texto para comenzar.
             </p>
-            <FileUploader />
+            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+              {({ isSubmitting }) => (
+                <Form>
+                  <FileUploader onChange={handleFileChange} file={file} />
+                </Form>
+              )}
+            </Formik>
             <div className="mt-8 grid grid-cols-2 gap-4">
               <div>
                 <h3 className="font-bold text-lg">Vista Previa</h3>
@@ -51,9 +121,12 @@ function Body() {
             </CardHeader>
             <CardBody className="w-full max-h-screen overflow-auto mt-6">
               {activeTab === "Vista Previa" ? (
-                <PDFViewer />
+                <PDFViewer file={file} />
               ) : (
-                <ExtractedTextResults />
+                <LoadingSpinner
+                  loading={loading}
+                  Componente={<ExtractedTextResults data={data} />}
+                />
               )}
             </CardBody>
           </Card>

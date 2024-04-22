@@ -23,7 +23,7 @@ function CustomTabs({ activeTab, onChange }) {
           </Tab>
         ))}
       </TabsHeader>
-      <TabsBody></TabsBody>
+      {/* <TabsBody></TabsBody> */}
     </Tabs>
   );
 }
