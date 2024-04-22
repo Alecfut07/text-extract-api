@@ -14,15 +14,34 @@ function Body() {
     <div className="mx-auto  py-12">
       <div className="flex flex-row justify-between">
         {/* Lado izquierdo */}
-        <div className="w-1/2 p-4">
-          <h2 className="font-bold text-xl">
-            Extract Text from PDF Files with Ease
-          </h2>
-          <p>
-            Simply choose a PDF file and click the extract text button to get
-            started.
-          </p>
-          <FileUploader />
+        <div className="w-1/2 flex justify-center">
+          {/* className="w-1/2 p-4" */}
+          <div className="p-4">
+            <h2 className="font-bold text-xl text-center">
+              Extraiga texto de archivos PDF con facilidad
+            </h2>
+            <p className="text-center">
+              Simplemente elija un archivo PDF y haga clic en el botón extraer
+              texto para comenzar.
+            </p>
+            <FileUploader />
+            <div className="mt-8 grid grid-cols-2 gap-4">
+              <div>
+                <h3 className="font-bold text-lg">Vista Previa</h3>
+                <p>
+                  Vea una vista previa del contenido del archivo PDF
+                  seleccionado.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg">Texto Extraído</h3>
+                <p>
+                  Muestra cada conjunto del texto extraído del archivo PDF en un
+                  cuadrado separado.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Lado derecho */}
