@@ -1,7 +1,15 @@
+import { useState } from "react";
 import { Card, CardBody, CardHeader } from "@material-tailwind/react";
 import FileUploader from "../FileUploader/FileUploader";
+import CustomTabs from "../CustomTabs/CustomTabs";
+import PDFViewer from "../PDFViewer/PDFViewer";
+import ExtractedTextResults from "../ExtractedTextResults/ExtractedTextResults";
 
 function Body() {
+  const [activeTab, setActiveTab] = useState("Vista Previa");
+
+  const handleTabChange = (value) => setActiveTab(value);
+
   return (
     <div className="mx-auto  py-12">
       <div className="flex flex-row justify-between">
@@ -21,11 +29,14 @@ function Body() {
         <div className="w-1/2 p-4">
           <Card>
             <CardHeader size="lg">
-              <h2 className="font-bold text-xl">PDF Preview</h2>
+              <CustomTabs activeTab={activeTab} onChange={handleTabChange} />
             </CardHeader>
-            <CardBody>
-              <iframe className="w-full h-96"></iframe>
-              {/* Reemplaza "URL_DEL_PDF" con la URL o la ruta local de tu PDF */}
+            <CardBody className="w-full max-h-screen overflow-auto mt-6">
+              {activeTab === "Vista Previa" ? (
+                <PDFViewer />
+              ) : (
+                <ExtractedTextResults />
+              )}
             </CardBody>
           </Card>
         </div>
